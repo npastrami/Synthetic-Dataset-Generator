@@ -11,7 +11,7 @@ class FormGenerator:
         self.blob_container_client = self.blob_service_client.get_container_client(f"generator-{form_type}")
         self.text_generator_factory = TextGeneratorFactory()
         self.fonts_folder_path = "/home/npastrana/Generator/Fonts"
-        self.NUM_COPIES = 4
+        self.NUM_COPIES = 3
 
         # Load the configuration for the specified form type
         with open(f'./form_configs/config_{form_type}.json', 'r+') as file:
