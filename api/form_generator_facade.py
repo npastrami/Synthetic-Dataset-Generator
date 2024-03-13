@@ -10,7 +10,7 @@ class FormGenerator:
         self.blob_service_client = BlobServiceClient.from_connection_string(azure_credentials.CONNECTION_STRING)
         self.blob_container_client = self.blob_service_client.get_container_client(f"generator-{form_type}")
         self.text_generator_factory = TextGeneratorFactory()
-        self.fonts_folder_path = "/home/npastrana/Generator/Fonts"
+        self.fonts_folder_path = "/home/npastrami/SDG/Fonts"
         self.NUM_COPIES = 3
 
         # Load the configuration for the specified form type

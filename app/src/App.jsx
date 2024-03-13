@@ -43,7 +43,7 @@ function App() {
   // DRY = Don't Repeat Yourself
   const makeCopies = (form_type) => {
     axios.post('/makecopies', { form_type })
-      console.log(form_type)
+      
       .then(response => {
         console.log(`POST request to /makeCopies for ${form_type} was successful`, response.data);
       })

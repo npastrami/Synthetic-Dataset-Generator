@@ -1,8 +1,33 @@
-from PIL import ImageDraw, ImageFont
+from PIL import ImageDraw, ImageFont, Image
 from io import BytesIO
 import os
 import random
 from pdf2image import convert_from_bytes
+import numpy as np
+
+def add_noise_to_image(image):
+    # 10% Chance of adding noise
+    if random.random() < 0.90:
+        return image
+    
+    # Convert PIL Image to numpy array
+    np_image = np.array(image)
+
+    # Generate Gaussian noise
+    noise = np.random.normal(0, 0.75, np_image.shape).astype(np.uint8)
+
+    # Add the noise to the image
+    noisy_image = np_image + noise
+
+    # Ensure the values are within the valid range
+    noisy_image = np.clip(noisy_image, 0, 255)
+
+    # Convert the noisy image back to PIL Image
+    noisy_image_pil = Image.fromarray(noisy_image)
+    
+    print("printing noisy")
+
+    return noisy_image_pil
 
 def draw_text_on_image(img, bounding_boxes, generate_text_for_keyword, fonts_folder_path):
     draw = ImageDraw.Draw(img)
@@ -33,6 +58,8 @@ def draw_text_on_image(img, bounding_boxes, generate_text_for_keyword, fonts_fol
 
                 if 0 <= x < img_width and 0 <= y < img_height:
                     draw.text((x, y), text, font=font, fill=(0, 0, 0))  # using black
+                    #draw.text((x, y), text, font=font, fill=(255, 0, 0)) # using red
+                    #draw.text((x, y), text, font=font, fill=(0, 0, 255)) # using blue
 
 def create_and_modify_copy(pdf_bytes, copy_index, bounding_boxes, generate_text_for_keyword, fonts_folder_path, blob_container_client, blob_name):
     # Convert PDF to image
@@ -41,6 +68,8 @@ def create_and_modify_copy(pdf_bytes, copy_index, bounding_boxes, generate_text_
 
     # Draw text on image
     draw_text_on_image(img, bounding_boxes, generate_text_for_keyword, fonts_folder_path)
+    
+    img = add_noise_to_image(img)
 
     # Save the modified image to a buffer
     image_buffer = BytesIO()
